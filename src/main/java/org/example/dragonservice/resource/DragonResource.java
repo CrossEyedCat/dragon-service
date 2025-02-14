@@ -1,9 +1,9 @@
 package org.example.dragonservice.resource;
 
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.GenericEntity;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import javax.ws.rs.*;
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.example.dragonservice.model.*;
 import org.example.dragonservice.service.DragonService;
 
@@ -11,11 +11,10 @@ import org.example.dragonservice.service.DragonService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 @Path("/dragons")
 public class DragonResource {
-    private DragonService dragonService = new DragonService();
+    private final DragonService dragonService = new DragonService();
 
     // GET /dragons
     @GET
@@ -35,7 +34,7 @@ public class DragonResource {
         DragonList dragonList = new DragonList();
         dragonList.setDragons(dragons);
 
-        return Response.ok(dragonList).build();
+        return Response.ok(dragonList).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Credentials", "true").build();
     }
 
     // POST /dragons
@@ -56,7 +55,7 @@ public class DragonResource {
 
         try {
             dragonService.addDragon(dragon);
-            return Response.status(Response.Status.CREATED).build();
+            return Response.status(Response.Status.CREATED).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Credentials", "true").build();
         } catch (Exception e) {
             return serverErrorResponse();
         }
@@ -74,8 +73,9 @@ public class DragonResource {
 
         List<DragonGroupByName> groupData = dragonService.groupByName();
 
-        GenericEntity<List<DragonGroupByName>> entity = new GenericEntity<List<DragonGroupByName>>(groupData) {};
-        return Response.ok(entity).build();
+        DragonGroupByNameList groupList = new DragonGroupByNameList();
+        groupList.setGroups(groupData);
+        return Response.ok(groupList).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Credentials", "true").build();
     }
 
     // GET /dragons/count-speaking
@@ -93,7 +93,7 @@ public class DragonResource {
         DragonCount dragonCount = new DragonCount();
         dragonCount.setCount(count);
 
-        return Response.ok(dragonCount).build();
+        return Response.ok(dragonCount).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Credentials", "true").build();
     }
 
     // GET /dragons/search-by-name
@@ -124,7 +124,7 @@ public class DragonResource {
         DragonList dragonList = new DragonList();
         dragonList.setDragons(dragons);
 
-        return Response.ok(dragonList).build();
+        return Response.ok(dragonList).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Credentials", "true").build();
     }
 
     // GET /dragons/{id}
@@ -152,7 +152,7 @@ public class DragonResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        return Response.ok(dragon).build();
+        return Response.ok(dragon).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Credentials", "true").build();
     }
 
     // PUT /dragons/{id}
@@ -186,7 +186,7 @@ public class DragonResource {
             if (!updated) {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-            return Response.ok().build();
+            return Response.ok().header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Credentials", "true").build();
         } catch (Exception e) {
             return serverErrorResponse();
         }
@@ -216,7 +216,7 @@ public class DragonResource {
             if (!deleted) {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-            return Response.status(Response.Status.NO_CONTENT).build();
+            return Response.status(Response.Status.NO_CONTENT).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Credentials", "true").build();
         } catch (Exception e) {
             return serverErrorResponse();
         }
@@ -238,11 +238,11 @@ public class DragonResource {
         errorResponse.setCode(400);
         errorResponse.setMessage("Invalid data");
         errorResponse.setDetails(details);
-        return Response.status(Response.Status.BAD_REQUEST).entity(errorResponse).build();
+        return Response.status(Response.Status.BAD_REQUEST).entity(errorResponse).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Credentials", "true").build();
     }
 
     private Response serverErrorResponse() {
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Credentials", "true").build();
     }
 
     private List<ErrorResponse.ErrorDetail> validateDragon(Dragon dragon) {
@@ -265,5 +265,15 @@ public class DragonResource {
         // Дополнительные проверки можно добавить здесь
 
         return errors;
+    }
+    @OPTIONS
+    @Path("{any:.*}") // Поддерживает все пути
+    public Response handleCORS(@HeaderParam("Origin") String origin) {
+        return Response.ok()
+                .header("Access-Control-Allow-Origin", origin != null ? origin : "*")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
+                .header("Access-Control-Allow-Credentials", "true")
+                .build();
     }
 }

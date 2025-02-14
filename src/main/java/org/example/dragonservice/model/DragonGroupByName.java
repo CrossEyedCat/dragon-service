@@ -1,9 +1,9 @@
 package org.example.dragonservice.model;
 
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
 
-@XmlRootElement(name = "dragonGroup")
+@XmlRootElement(name = "group")
 public class DragonGroupByName {
     private String name;
     private Integer count;

@@ -1,17 +1,17 @@
 package org.example.dragonservice.model;
 
 
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import java.time.LocalDateTime;
 
 @XmlRootElement(name = "dragon")
 public class Dragon {
     private Integer id;
     private String name;
     private Coordinates coordinates;
-    private LocalDateTime creationDate;
+    private java.time.LocalDate creationDate;
     private Integer age;
     private Double wingspan;
     private Boolean speaking;
@@ -31,8 +31,13 @@ public class Dragon {
     public void setCoordinates(Coordinates coordinates) { this.coordinates = coordinates; }
 
     @XmlElement
-    public LocalDateTime getCreationDate() { return creationDate; }
-    public void setCreationDate(LocalDateTime creationDate) { this.creationDate = creationDate; }
+    public java.time.LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(java.time.LocalDate creationDate) {
+        this.creationDate = creationDate;
+    }
 
     @XmlElement
     public Integer getAge() { return age; }

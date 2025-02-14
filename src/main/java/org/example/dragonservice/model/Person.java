@@ -1,13 +1,15 @@
 package org.example.dragonservice.model;
 
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import java.time.LocalDate;
 
 @XmlRootElement(name = "person")
 public class Person {
     private String name;
-    private LocalDate birthday;
+    private String birthday;
     private Color hairColor;
     private Country nationality;
     private Location location;
@@ -17,8 +19,8 @@ public class Person {
     public void setName(String name) { this.name = name; }
 
     @XmlElement
-    public LocalDate getBirthday() { return birthday; }
-    public void setBirthday(LocalDate birthday) { this.birthday = birthday; }
+    public String getBirthday() { return birthday; }
+    public void setBirthday(String birthday) { this.birthday = birthday; }
 
     @XmlElement
     public Color getHairColor() { return hairColor; }

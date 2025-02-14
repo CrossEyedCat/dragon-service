@@ -1,17 +1,29 @@
 package org.example.dragonservice.model;
 
 
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.List;
 
 @XmlRootElement(name = "dragons")
 public class DragonList {
+
     private List<Dragon> dragons;
 
-    @XmlElementWrapper(name = "dragons")
+    public DragonList() {
+    }
+
+    public DragonList(List<Dragon> dragons) {
+        this.dragons = dragons;
+    }
+
     @XmlElement(name = "dragon")
-    public List<Dragon> getDragons() { return dragons; }
-    public void setDragons(List<Dragon> dragons) { this.dragons = dragons; }
+    public List<Dragon> getDragons() {
+        return dragons;
+    }
+
+    public void setDragons(List<Dragon> dragons) {
+        this.dragons = dragons;
+    }
 }
